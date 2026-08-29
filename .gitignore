@@ -1,0 +1,27 @@
+# --- Dependencies i entorn ---
+.env
+node_modules
+artifacts
+cache
+
+# --- Configuracio local d'eines de desenvolupament ---
+.claude/
+.agents/
+.vscode/
+.idea/
+
+# --- Registres i fitxers de treball temporals ---
+*.log
+!packages/**/*.log
+codex-*.log
+AUDITORIA_MEMORIA_TFG.md
+context_*.txt
+context_*.docx
+canvis*.txt
+reunio*.txt
+Especificaciones.txt
+Iniciador_v1.txt
+
+# --- Documentacio administrativa amb dades personals (NO publicar) ---
+docu_Entrega/
+
