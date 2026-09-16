@@ -9,7 +9,7 @@ async function test() {
     const stats = await getStats();
     console.log(stats);
     
-    console.log('✅ Prova completada');
+    console.log('✅ Test completed');
     await closeDB();
   } catch (error) {
     console.error('❌ Error:', error);

@@ -33,25 +33,25 @@ async function checkOllama() {
     if (!response.ok) {
       return {
         status: 'error',
-        message: `Ollama ha contestat amb estat ${response.status}`,
+        message: `Ollama replied with status ${response.status}`,
       };
     }
 
     return {
       status: 'ok',
-      message: 'Ollama disponible',
+      message: 'Ollama available',
     };
   } catch (error) {
     console.warn('⚠️ Could not connect to Ollama:', error.message);
     return {
       status: 'error',
-      message: 'No s’ha pogut connectar amb Ollama',
+      message: 'Could not connect to Ollama',
     };
   }
 }
 
 app.get('/ping', (req, res) => {
-  res.json({ status: 'ok', message: 'Backend funcionant' });
+  res.json({ status: 'ok', message: 'Backend working' });
 });
 
 app.get('/health', async (req, res) => {
@@ -60,7 +60,7 @@ app.get('/health', async (req, res) => {
   const health = {
     backend: {
       status: 'ok',
-      message: 'Backend funcionant',
+      message: 'Backend working',
     },
     database: {
       status: databaseReady ? 'ok' : 'error',
@@ -129,11 +129,11 @@ app.get('/analysis-history', async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Error obtenint l'historial:", error.message);
+    console.error("❌ Error getting the analysis history:", error.message);
 
     res.status(500).json({
       success: false,
-      error: "Error obtenint l'historial",
+      error: "Error getting the analysis history",
       details: error.message,
     });
   }
@@ -184,11 +184,11 @@ app.get('/known-addresses', async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('❌ Error obtenint les adreces conegudes:', error.message);
+    console.error('❌ Error getting the known addresses:', error.message);
 
     res.status(500).json({
       success: false,
-      error: 'Error obtenint les adreces conegudes',
+      error: 'Error getting the known addresses',
       details: error.message,
     });
   }
@@ -209,7 +209,7 @@ app.post('/known-addresses/manual', async (req, res) => {
     const cleanLabel =
       typeof label === 'string' && label.trim()
         ? label.trim()
-        : "Etiqueta manual de l'usuari";
+        : "User's manual label";
 
     const cleanType = normalizeManualAddressType(type);
 
@@ -272,7 +272,7 @@ app.post('/analyze', async (req, res) => {
   try {
     const txData = req.body;
 
-    console.log('📥 Analitzant:', txData);
+    console.log('📥 Analyzing:', txData);
 
     const analysis = await analyzeTransaction(txData);
 
@@ -306,10 +306,10 @@ app.post('/analyze', async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('❌ Error analysing the transaction:', error.message);
+    console.error('❌ Error analyzing the transaction:', error.message);
     res.status(500).json({
       success: false,
-      error: 'Error analysing the transaction',
+      error: 'Error analyzing the transaction',
       details: error.message,
     });
   }
@@ -323,11 +323,11 @@ async function bootstrap() {
     databaseReady = true;
 
     app.listen(PORT, () => {
-      console.log(`🚀 Backend funcionant en http://localhost:${PORT}`);
-      console.log(`🤖 Ollama esperat en http://localhost:11434`);
+      console.log(`🚀 Backend working at http://localhost:${PORT}`);
+      console.log(`🤖 Ollama waiting at http://localhost:11434`);
     });
   } catch (error) {
-    console.error('❌ Error inicialitzant el backend:', error.message);
+    console.error('❌ Error initializing the backend:', error.message);
     process.exit(1);
   }
 }

@@ -925,9 +925,9 @@ const Index = () => {
       setHealth(data);
       setHealthError(null);
     } catch (loadError) {
-      console.error('Error consultant /health:', loadError);
+      console.error('Error consulting /health:', loadError);
       setHealth(null);
-      setHealthError('No s’ha pogut connectar amb el backend');
+      setHealthError('Could not connect to the backend');
     } finally {
       setIsLoadingHealth(false);
     }
@@ -947,7 +947,7 @@ const Index = () => {
       setStats(data.stats);
       setStatsError(null);
     } catch (loadError) {
-      console.error('Error consultant /stats:', loadError);
+      console.error('Error consulting /stats:', loadError);
       setStats(null);
       setStatsError('Could not load the statistics');
     } finally {
@@ -971,7 +971,7 @@ const Index = () => {
       setHistory(data.history || []);
       setHistoryError(null);
     } catch (loadError) {
-      console.error('Error consultant /analysis-history:', loadError);
+      console.error('Error consulting /analysis-history:', loadError);
       setHistory([]);
       setHistoryError('Could not load the analysis history');
     } finally {
@@ -1007,10 +1007,10 @@ const Index = () => {
       setKnownAddresses(data.addresses || []);
       setKnownAddressesError(null);
     } catch (loadError) {
-      console.error('Error consultant /known-addresses:', loadError);
+      console.error('Error consulting /known-addresses:', loadError);
       setKnownAddresses([]);
       setKnownAddressesError(
-        'No s’han pogut carregar les direccions conegudes',
+        'Could not load the known addresses',
       );
     } finally {
       setIsLoadingKnownAddresses(false);
@@ -1031,7 +1031,7 @@ const Index = () => {
       setDashboardMetrics(data.metrics);
       setDashboardMetricsError(null);
     } catch (loadError) {
-      console.error('Error consultant /dashboard-metrics:', loadError);
+      console.error('Error consulting /dashboard-metrics:', loadError);
       setDashboardMetrics(null);
       setDashboardMetricsError(
         'Could not load the dashboard charts',
@@ -1064,7 +1064,7 @@ const Index = () => {
       const data: ManualReportResponse = await response.json();
 
       if (!response.ok || !data.success) {
-        throw new Error(data.error ?? 'No s’ha pogut guardar l’informe manual');
+        throw new Error(data.error ?? 'Could not save the manual report');
       }
 
       setManualReportSuccess(true);
@@ -1076,13 +1076,13 @@ const Index = () => {
 
       await Promise.all([loadKnownAddresses(), loadStats()]);
     } catch (submitError) {
-      console.error('Error enviant l’informe manual:', submitError);
+      console.error('Error submitting the manual report:', submitError);
 
       setManualReportSuccess(false);
       setManualReportMessage(
         submitError instanceof Error
           ? submitError.message
-          : 'Error desconegut enviant l’informe manual',
+          : 'Unknown error submitting the manual report',
       );
     } finally {
       setIsSubmittingManualReport(false);
@@ -1128,7 +1128,7 @@ const Index = () => {
       return item.method_selector;
     }
 
-    return 'desconegut';
+    return 'unknown';
   };
 
   const renderStatusCard = (
@@ -1269,7 +1269,7 @@ const Index = () => {
 
   const formatUnknownValue = (value: unknown) => {
     if (value === null || value === undefined || value === '') {
-      return 'No disponible';
+      return 'Unavailable';
     }
 
     if (typeof value === 'string') {
@@ -1394,7 +1394,7 @@ const Index = () => {
       loadHistory(),
       loadKnownAddresses(),
       loadDashboardMetrics(),
-    ]).catch(reportUnexpectedError('actualitzant el panell'));
+    ]).catch(reportUnexpectedError('updating the dashboard'));
   };
 
   const isRefreshing =
@@ -1434,7 +1434,7 @@ const Index = () => {
             Local monitoring
           </WorkspaceKicker>
           <Heading>
-            Assistent de <Span>Seguretat Web3</Span>
+            Web3 <Span>Security Assistant</Span>
           </Heading>
           <Subtitle>
             Snap monitoring, risk analysis and local memory.
@@ -1446,8 +1446,8 @@ const Index = () => {
             $status={health?.backend?.status === 'ok' ? 'ok' : 'error'}
           />
           {health?.backend?.status === 'ok'
-            ? 'Sistema operatiu'
-            : 'Sistema no disponible'}
+            ? 'System operational'
+            : 'System unavailable'}
         </HeaderMeta>
       </WorkspaceHeader>
 
@@ -1463,7 +1463,7 @@ const Index = () => {
           onClick={() => setActiveView('overview')}
         >
           <BarChart3 size={17} aria-hidden="true" />
-          Resum
+          Summary
         </TabButton>
         <TabButton
           id="history-tab"
@@ -1528,13 +1528,13 @@ const Index = () => {
                 disabled={isRefreshing}
               >
                 <RefreshCw size={16} aria-hidden="true" />
-                {isRefreshing ? 'Actualitzant...' : 'Actualitzar'}
+                {isRefreshing ? 'Updating...' : 'Update'}
               </SmallButton>
             </SectionHeader>
 
             {healthError ? (
               <ErrorMessage>
-                <b>Backend desconnectat:</b> {healthError}
+                <b>Backend disconnected:</b> {healthError}
               </ErrorMessage>
             ) : null}
 
@@ -1545,10 +1545,10 @@ const Index = () => {
                 isLoadingHealth ? 'Checking backend...' : 'No response',
               )}
               {renderStatusCard(
-                'Base de dades',
+                'Database',
                 health?.database,
                 isLoadingHealth
-                  ? 'Comprovant base de dades...'
+                  ? 'Checking database...'
                   : 'No response',
               )}
               {renderStatusCard(
@@ -1622,21 +1622,20 @@ const Index = () => {
                   Analysis history
                 </DashboardTitle>
                 <SectionDescription>
-                  Selecciona un registre per consultar-ne el veredicte i les
-                  technical data.
+                  Select a record to view its verdict and technical data.
                 </SectionDescription>
               </SectionHeadingGroup>
               <SmallButton
                 type="button"
                 onClick={() => {
                   loadHistory().catch(
-                    reportUnexpectedError('actualitzant l’historial'),
+                    reportUnexpectedError('updating the history'),
                   );
                 }}
                 disabled={isLoadingHistory}
               >
                 <RefreshCw size={16} aria-hidden="true" />
-                {isLoadingHistory ? 'Actualitzant...' : 'Actualitzar'}
+                {isLoadingHistory ? 'Updating...' : 'Update'}
               </SmallButton>
             </SectionHeader>
 
@@ -1650,7 +1649,7 @@ const Index = () => {
               <SelectInput
                 value={historyRisk}
                 onChange={(event) => setHistoryRisk(event.target.value)}
-                aria-label="Filtrar l’historial per risc"
+                aria-label="Filter the history by risk"
               >
                 <option value="all">All levels</option>
                 <option value="LOW">Low risk</option>
@@ -1665,13 +1664,13 @@ const Index = () => {
                 }}
               >
                 <ListFilter size={16} aria-hidden="true" />
-                Netejar
+                Clear
               </SmallButton>
             </FilterBar>
 
             {historyError ? (
               <ErrorMessage>
-                <b>Error carregant l’historial:</b> {historyError}
+                <b>Error loading the history:</b> {historyError}
               </ErrorMessage>
             ) : null}
 
@@ -1754,7 +1753,7 @@ const Index = () => {
 
               {analysisDetailError ? (
                 <ErrorMessage>
-                  <b>Error carregant el detall:</b> {analysisDetailError}
+                  <b>Error loading the detail:</b> {analysisDetailError}
                 </ErrorMessage>
               ) : null}
 
@@ -1771,8 +1770,8 @@ const Index = () => {
                     <IconButton
                       type="button"
                       onClick={closeAnalysisDetail}
-                      aria-label="Tancar el detall"
-                      title="Tancar el detall"
+                      aria-label="Close the detail"
+                      title="Close the detail"
                     >
                       <X size={18} aria-hidden="true" />
                     </IconButton>
@@ -1780,7 +1779,7 @@ const Index = () => {
 
                   <DetailGrid>
                     <DetailBox>
-                      <DetailLabel>Veredicte final</DetailLabel>
+                      <DetailLabel>Final Verdict</DetailLabel>
                       <DetailValue>
                         <RiskBadge
                           $risk={getDetailRisk(selectedAnalysisDetail)}
@@ -1825,7 +1824,7 @@ const Index = () => {
 
                   <DetailSectionTitle>Explanation</DetailSectionTitle>
                   <DetailSubtitle>
-                    {selectedAnalysisDetail.explanation ?? 'No disponible'}
+                    {selectedAnalysisDetail.explanation ?? 'Not available'}
                   </DetailSubtitle>
 
                   <DetailSectionTitle>Indicadors detectats</DetailSectionTitle>
@@ -1865,7 +1864,7 @@ const Index = () => {
                   </TechnicalDetails>
                   <TechnicalDetails>
                     <TechnicalSummary>
-                      Senyals d’adreces conegudes
+                      Known address signals
                     </TechnicalSummary>
                     <TechnicalContent>
                       <JsonBlock>
@@ -1876,7 +1875,7 @@ const Index = () => {
                     </TechnicalContent>
                   </TechnicalDetails>
                   <TechnicalDetails>
-                    <TechnicalSummary>Veredicte complet</TechnicalSummary>
+                    <TechnicalSummary>Final Verdict</TechnicalSummary>
                     <TechnicalContent>
                       <JsonBlock>
                         {formatUnknownValue(
@@ -1886,7 +1885,7 @@ const Index = () => {
                     </TechnicalContent>
                   </TechnicalDetails>
                   <TechnicalDetails>
-                    <TechnicalSummary>Rendiment</TechnicalSummary>
+                    <TechnicalSummary>Performance</TechnicalSummary>
                     <TechnicalContent>
                       <JsonBlock>
                         {formatUnknownValue(selectedAnalysisDetail.performance)}
@@ -1920,20 +1919,20 @@ const Index = () => {
                 Known addresses
               </DashboardTitle>
               <SectionDescription>
-                Consulta les fonts de context i incorpora etiquetes locals.
+                Consult the context sources and add local labels.
               </SectionDescription>
             </SectionHeadingGroup>
             <SmallButton
               type="button"
               onClick={() => {
                 loadKnownAddresses().catch(
-                  reportUnexpectedError('actualitzant les adreces'),
+                  reportUnexpectedError('updating the addresses'),
                 );
               }}
               disabled={isLoadingKnownAddresses}
             >
               <RefreshCw size={16} aria-hidden="true" />
-              {isLoadingKnownAddresses ? 'Actualitzant...' : 'Actualitzar'}
+              {isLoadingKnownAddresses ? 'Updating...' : 'Update'}
             </SmallButton>
           </SectionHeader>
 
@@ -1951,13 +1950,13 @@ const Index = () => {
                 <SelectInput
                   value={knownAddressType}
                   onChange={(event) => setKnownAddressType(event.target.value)}
-                  aria-label="Filtrar les adreces per tipus"
+                  aria-label="Filter addresses by type"
                 >
                   <option value="all">All types</option>
-                  <option value="warning">Advertiment</option>
-                  <option value="suspicious">Sospitosa</option>
-                  <option value="scam">Estafa</option>
-                  <option value="blacklisted">Llista de bloqueig</option>
+                  <option value="warning">Warning</option>
+                  <option value="suspicious">Suspicious</option>
+                  <option value="scam">Scam</option>
+                  <option value="blacklisted">Blacklisted</option>
                   <option value="trusted">Trusted</option>
                   <option value="test_contract">Test contract</option>
                   <option value="own_contract">Own contract</option>
@@ -1966,19 +1965,19 @@ const Index = () => {
                   type="button"
                   onClick={() => {
                     loadKnownAddresses().catch(
-                      reportUnexpectedError('filtrant les adreces'),
+                      reportUnexpectedError('filtering the addresses'),
                     );
                   }}
                   disabled={isLoadingKnownAddresses}
                 >
                   <Search size={16} aria-hidden="true" />
-                  Aplicar
+                  Apply
                 </SmallButton>
               </FilterBar>
 
               {knownAddressesError ? (
                 <ErrorMessage>
-                  <b>Error carregant les adreces:</b> {knownAddressesError}
+                  <b>Error loading the addresses:</b> {knownAddressesError}
                 </ErrorMessage>
               ) : null}
 
@@ -1987,7 +1986,7 @@ const Index = () => {
                   <EmptyState>
                     {isLoadingKnownAddresses
                       ? 'Loading known addresses...'
-                      : 'No hi ha adreces conegudes per mostrar.'}
+                      : 'No known addresses to display.'}
                   </EmptyState>
                 ) : (
                   <HistoryTable>
@@ -1996,8 +1995,8 @@ const Index = () => {
                         <TableHeader>Address</TableHeader>
                         <TableHeader>Label</TableHeader>
                         <TableHeader>Type</TableHeader>
-                        <TableHeader>Font</TableHeader>
-                        <TableHeader>Afegida</TableHeader>
+                        <TableHeader>Source</TableHeader>
+                        <TableHeader>Added</TableHeader>
                       </tr>
                     </TableHead>
                     <tbody>
@@ -2030,7 +2029,7 @@ const Index = () => {
 
             <FormPanel>
               <ManualReportSection>
-                <DashboardTitle>Informe manual</DashboardTitle>
+                <DashboardTitle>Manual Report</DashboardTitle>
                 <QuickActionsDescription>
                   Add an address to the local dataset to provide
                   context to subsequent analyses.
@@ -2065,10 +2064,10 @@ const Index = () => {
                     value={manualType}
                     onChange={(event) => setManualType(event.target.value)}
                   >
-                    <option value="warning">Advertiment</option>
-                    <option value="suspicious">Sospitosa</option>
-                    <option value="scam">Estafa</option>
-                    <option value="blacklisted">Llista de bloqueig</option>
+                    <option value="warning">Warning</option>
+                    <option value="suspicious">Suspicious</option>
+                    <option value="scam">Scam</option>
+                    <option value="blacklisted">Blacklisted</option>
                     <option value="trusted">Trusted</option>
                     <option value="test_contract">Test contract</option>
                     <option value="own_contract">Own contract</option>
@@ -2079,7 +2078,7 @@ const Index = () => {
                   type="button"
                   onClick={() => {
                     submitManualReport().catch(
-                      reportUnexpectedError('desant l’informe manual'),
+                      reportUnexpectedError('submitting the manual report'),
                     );
                   }}
                   disabled={isSubmittingManualReport}
@@ -2110,11 +2109,11 @@ const Index = () => {
           <QuickActionsSection>
             <QuickActionsHeader>
               <QuickActionsTitle id="tests-title">
-                Eines de prova
+                Test Tools
               </QuickActionsTitle>
               <QuickActionsDescription>
                 Connection, manual checks and Snap validation during
-                desenvolupament.
+                development.
               </QuickActionsDescription>
             </QuickActionsHeader>
 
@@ -2140,7 +2139,7 @@ const Index = () => {
               {installedSnap ? null : (
                 <Card
                   content={{
-                    title: 'Connectar el Snap',
+                    title: 'Connect the Snap',
                     description:
                       'Install and connect the local Snap before analysing transactions.',
                     button: (
@@ -2157,7 +2156,7 @@ const Index = () => {
               {shouldDisplayReconnectButton(installedSnap) ? (
                 <Card
                   content={{
-                    title: 'Reconnectar el Snap',
+                    title: 'Reconnect the Snap',
                     description:
                       'Refresh the connection after a code change or an environment restart.',
                     button: (

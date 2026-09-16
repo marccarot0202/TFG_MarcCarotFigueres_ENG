@@ -22,7 +22,7 @@ function buildContextSummary(tx) {
   if (tx.decoded?.method === 'approve') {
     parts.push('Method: approve');
     parts.push(`Spender: ${tx.decoded.spender}`);
-    parts.push(`Quantitat: ${tx.decoded.amount}`);
+    parts.push(`Amount: ${tx.decoded.amount}`);
     parts.push(
       `Unlimited approval: ${tx.decoded.is_infinite_approval ? 'yes' : 'no'}`,
     );
@@ -30,12 +30,12 @@ function buildContextSummary(tx) {
 
   if (tx.decoded?.method === 'setApprovalForAll') {
     parts.push('Method: setApprovalForAll');
-    parts.push(`Operador: ${tx.decoded.operator}`);
+    parts.push(`Operator: ${tx.decoded.operator}`);
     parts.push(`Approved: ${tx.decoded.approved ? 'yes' : 'no'}`);
   }
 
   if (tx.has_value) {
-    parts.push(`Valor: ${tx.value}`);
+    parts.push(`Value: ${tx.value}`);
   }
 
   return parts.join(' | ');
@@ -250,9 +250,9 @@ async function collectKnownAddressSignals(tx) {
 
     signals.matches[item.key] = match;
 
-    const label = match.label || 'sense etiqueta';
+    const label = match.label || 'no label';
     const type = String(match.type || '').toLowerCase();
-    const source = match.source || 'font desconeguda';
+    const source = match.source || 'unknown source';
 
     if (item.key === 'target') {
       signals.findings.push(
@@ -268,7 +268,7 @@ async function collectKnownAddressSignals(tx) {
       );
     }
 
-    signals.findings.push(`Font de l'etiqueta: ${source}`);
+    signals.findings.push(`Label source: ${source}`);
 
     if (type === 'scam' || type === 'blacklist' || type === 'blacklisted') {
       signals.score_adjustment += 50;
@@ -315,7 +315,7 @@ async function collectKnownAddressSignals(tx) {
 
 function safeJsonParseFromText(text) {
   if (!text || typeof text !== 'string') {
-    throw new Error('Resposta buida o no textual');
+    throw new Error('Empty response or non-textual');
   }
 
   const trimmed = text.trim();
@@ -722,10 +722,10 @@ Exact format:
     return sanitizeAiReview(
       {
         ai_risk_hint: deterministicVerdict.risk_level,
-        confidence: 'baja',
+        confidence: 'low',
         ai_flags: [],
         reviewer_summary:
-          "No s'han pogut generar observacions addicionals de la IA",
+          "Additional observations from the AI could not be generated",
         raw_response: raw,
       },
       semanticFacts,
@@ -765,7 +765,7 @@ function fuseVerdicts(deterministicVerdict, aiReview) {
   return {
     risk_level: baseRisk,
     source: 'deterministic_base',
-    reason: 'No hi ha hagut motius suficients per alterar el veredicte base',
+    reason: 'No sufficient reasons to alter the base verdict',
   };
 }
 
@@ -839,7 +839,7 @@ async function analyzeTransaction(rawTxData) {
   console.log('🤖 AI review:', aiReview);
 
   const finalVerdict = fuseVerdicts(deterministicVerdict, aiReview);
-  console.log('⚖️ Veredicte final:', finalVerdict);
+  console.log('⚖️ Final verdict:', finalVerdict);
 
   console.log('🛡️ Deterministic verdict:', deterministicVerdict);
 

@@ -10,15 +10,15 @@ async function testBackend() {
       amount: 'unlimited',
     });
 
-    console.log('✅ Resposta correcta:\n');
-    console.log('🔴 Risc:', response.data.risk);
+    console.log('✅ Correct response:\n');
+    console.log('🔴 Risk:', response.data.risk);
     console.log('\n📝 Explanation:');
     console.log(response.data.explanation);
-    console.log('\n⏰ Marca temporal:', response.data.timestamp);
+    console.log('\n⏰ Timestamp:', response.data.timestamp);
   } catch (error) {
     console.error('❌ Error:', error.message);
     if (error.response) {
-      console.error('Resposta:', error.response.data);
+      console.error('Answer:', error.response.data);
     }
   }
 }

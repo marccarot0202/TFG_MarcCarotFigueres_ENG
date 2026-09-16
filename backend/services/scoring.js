@@ -37,7 +37,7 @@ function scoreContext(tx, context) {
   if (context.etherscan && context.etherscan.fetched) {
     if (!context.etherscan.verified) {
       score += 25;
-      issues.push('Contracte no verificat a Etherscan');
+      issues.push('Contract not verified on Etherscan');
     }
 
     if (context.etherscan.sourceCode) {
@@ -67,7 +67,7 @@ function scoreContext(tx, context) {
 
     if (highRiskCount > 0) {
       score += 15;
-      issues.push("Hi ha transaccions similars amb risc ALT a l'historial");
+      issues.push("There are similar transactions with HIGH risk in the history");
     }
   }
 

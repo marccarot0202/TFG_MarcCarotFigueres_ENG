@@ -18,7 +18,7 @@ async function fetchJson(url) {
   const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error(`No s'ha pogut descarregar ${url} (${response.status})`);
+    throw new Error(`Could not download ${url} (${response.status})`);
   }
 
   return await response.json();
@@ -34,7 +34,7 @@ function mapDarklistEntry(entry) {
   return {
     address,
     label: entry.comment
-      ? `Llista fosca de MEW: ${entry.comment}`.slice(0, 255)
+      ? `Darklist from MEW: ${entry.comment}`.slice(0, 255)
       : 'Address from the MEW darklist',
     type: 'warning',
     source: 'mew_ethereum_lists_darklist',
@@ -86,21 +86,21 @@ async function importEntries(entries, mapper) {
 async function main() {
   await initDB();
 
-  console.log('🌐 Descarregant la llista fosca de MEW...');
+  console.log('🌐 Downloading the MEW darklist...');
   const darklist = await fetchJson(DARKLIST_URL);
 
   console.log('\u{1F310} Downloading the MEW lightlist...');
   const lightlist = await fetchJson(LIGHTLIST_URL);
 
   console.log(
-    `📦 Llista fosca descarregada: ${
+    `📦 Darklist downloaded: ${
       Array.isArray(darklist) ? darklist.length : 0
-    } entrades`,
+    } entries`,
   );
   console.log(
     `\u{1F4E6} Lightlist downloaded: ${
       Array.isArray(lightlist) ? lightlist.length : 0
-    } entrades`,
+    } entries`,
   );
 
   const darkResult = await importEntries(
@@ -113,9 +113,9 @@ async function main() {
     mapLightlistEntry,
   );
 
-  console.log('✅ Importació completada');
+  console.log('✅ Import completed');
   console.log(
-    `   Llista fosca -> importades: ${darkResult.imported}, omeses: ${darkResult.skipped}`,
+    `   Darklist -> imported: ${darkResult.imported}, skipped: ${darkResult.skipped}`,
   );
   console.log(
     `   Lightlist -> imported: ${lightResult.imported}, skipped: ${lightResult.skipped}`,
@@ -124,7 +124,7 @@ async function main() {
 
 main()
   .catch(async (error) => {
-    console.error('❌ Error important ethereum-lists:', error.message);
+    console.error('❌ Error importing ethereum-lists:', error.message);
     process.exitCode = 1;
   })
   .finally(async () => {

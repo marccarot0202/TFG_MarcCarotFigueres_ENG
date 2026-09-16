@@ -7,7 +7,7 @@ import { Box, Text, Bold, Heading } from '@metamask/snaps-sdk/jsx';
 
 function formatBulletList(items: string[], maxItems = 5): string {
   if (!Array.isArray(items) || items.length === 0) {
-    return 'Sense elements';
+    return 'No elements';
   }
 
   return items
@@ -18,7 +18,7 @@ function formatBulletList(items: string[], maxItems = 5): string {
 
 function renderBulletTexts(items: string[], maxItems = 5, prefix = 'item') {
   if (!Array.isArray(items) || items.length === 0) {
-    return <Text>• Sense elements</Text>;
+    return <Text>• No elements</Text>;
   }
 
   return (
@@ -41,15 +41,15 @@ async function analyzeTransaction(txData: any) {
     });
 
     if (!response.ok) {
-      throw new Error(`Error del backend: ${response.statusText}`);
+      throw new Error(`Backend error: ${response.statusText}`);
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Error cridant el backend:', error);
+    console.error('Error calling the backend:', error);
     return {
       success: false,
-      error: "No s'ha pogut connectar amb el backend",
+      error: "Could not connect to the backend",
       risk: 'UNKNOWN',
       risk_score: 0,
       issues: ['Could not retrieve the analysis from the backend'],
@@ -63,11 +63,11 @@ async function analyzeTransaction(txData: any) {
       final_verdict: {
         risk_level: 'UNKNOWN',
         source: 'fallback',
-        reason: "No s'ha pogut obtenir el veredicte final",
+        reason: "Could not retrieve the final verdict",
       },
       ai_review: {
         ai_risk_hint: 'UNKNOWN',
-        confidence: 'baja',
+        confidence: 'low',
         ai_flags: [],
         reviewer_summary: 'Could not retrieve the AI review',
       },
@@ -193,7 +193,7 @@ function getAiFlags(analysis: any): string[] {
 function getAiSummary(analysis: any): string {
   return (
     analysis?.ai_review?.reviewer_summary ||
-    'Sense observacions addicionals de la IA'
+    'No additional observations from the AI'
   );
 }
 
@@ -299,7 +299,7 @@ function renderAnalysisCard(analysis: any, chainId: string, origin?: string) {
       <Heading>{getRiskEmoji(displayedRisk)} Security analysis</Heading>
 
       <Text>
-        <Bold>Veredicte final:</Bold> {getRiskLabel(displayedRisk)}
+        <Bold>Final verdict:</Bold> {getRiskLabel(displayedRisk)}
       </Text>
 
       <Text>
@@ -307,15 +307,15 @@ function renderAnalysisCard(analysis: any, chainId: string, origin?: string) {
       </Text>
 
       <Text>
-        <Bold>Font del veredicte:</Bold> {getSourceLabel(finalSource)}
+        <Bold>Final source:</Bold> {getSourceLabel(finalSource)}
       </Text>
 
       <Text>
-        <Bold>Motiu principal:</Bold> {finalReason}
+        <Bold>Primary reason:</Bold> {finalReason}
       </Text>
 
       <Text>
-        <Bold>Indicis principals:</Bold>
+        <Bold>Primary indicators:</Bold>
       </Text>
       {renderBulletTexts(orderedPrimaryFindings, 8, 'primary')}
 
@@ -404,7 +404,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
           content: (
             <Box>
               <Text>
-                Hola, <Bold>{origin}</Bold>!
+                Hey, <Bold>{origin}</Bold>!
               </Text>
               <Text>
                 This confirmation checks the communication with the Snap.
@@ -430,7 +430,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
           type: 'alert',
           content: renderAnalysisCard(
             analysis,
-            txData.chainId || 'Desconeguda',
+            txData.chainId || 'Unknown',
             origin,
           ),
         },

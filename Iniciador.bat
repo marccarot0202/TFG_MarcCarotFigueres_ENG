@@ -5,9 +5,9 @@ echo =========================================
 echo Iniciando entorno completo TFG
 echo =========================================
 
-set "NVM_HOME=C:\Users\marcc\AppData\Local\nvm"
+set "NVM_HOME=C:\Users\User\AppData\Local\Author Software\nvm"
 set "NODE_VERSION_ROOT=20.11.1"
-set "PROJECT_ROOT=C:\Users\marcc\Desktop\TFG\tfg_marc_v1"
+set "PROJECT_ROOT=C:\Users\User\Desktop\NACHO\UNI\DOCTORAT\TFGS\TFGS_TUTORITZATS\MARC_CAROT\TFG_MarcCarotFigueres_ENG"
 
 set "PATH=%NVM_HOME%;%PATH%"
 
@@ -48,7 +48,7 @@ start "Backend" cmd /k "cd /d ""%PROJECT_ROOT%\backend"" && node -v && where nod
 timeout /t 4 /nobreak > nul
 
 echo Iniciando DApp + Snap...
-start "DApp + Snap" cmd /k "cd /d ""%PROJECT_ROOT%"" && node -v && where node && yarn start"
+start "DApp + Snap" cmd /k "cd /d ""%PROJECT_ROOT%"" && node -v && where node && corepack yarn start"
 
 echo =========================================
 echo Todo lanzado correctamente

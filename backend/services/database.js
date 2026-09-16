@@ -63,7 +63,7 @@ function initDB() {
   return new Promise((resolve, reject) => {
     db = new sqlite3.Database(DB_PATH, (err) => {
       if (err) {
-        console.error('❌ Error obrint la base de dades:', err.message);
+        console.error('❌ Error opening the database:', err.message);
         reject(err);
         return;
       }
@@ -75,7 +75,7 @@ function initDB() {
 
       db.exec(schema, (err) => {
         if (err) {
-          console.error('❌ Error creant les taules:', err.message);
+          console.error('❌ Error creating tables:', err.message);
           reject(err);
         } else {
           console.log('✅ Tables initialised');
